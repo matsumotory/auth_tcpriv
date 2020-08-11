@@ -26,7 +26,7 @@ sudo apt-get -y remove nano
 sudo apt-get -y install gawk chrpath socat libsdl1.2-dev xterm libncurses5-dev lzop flex libelf-dev kmod
 
 sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-6.0 1000
-sudo sed -i s/#deb-src/deb-src/ /etc/apt/sources.list
+sudo sed -i s/#\ deb-src/deb-src/ /etc/apt/sources.list
 sudo apt update
 sudo apt install -y dpkg-dev
 
