@@ -4,6 +4,7 @@ MYHOST=`hostname`
 SRC_DIR=~/auth_remote_client_uid
 BUILD_DIR=$SRC_DIR/build
 TEST_DIR=$SRC_DIR/test
+MYSQL_BUILD_DIR=$SRC_DIR/mysql_build
 REPO=https://github.com/matsumotory/auth_remote_client_uid.git
 
 # use ccache
@@ -35,9 +36,17 @@ if [ -d $BUILD_DIR ]; then
 fi
 mkdir $BUILD_DIR
 
+if [ -d $MYSQL_BUILD_DIR ]; then
+  rm -rf $MYSQL_BUILD_DIR
+fi
+mkdir $MYSQL_BUILD_DIR
+
 if [ $MYHOST = "server" ]; then
-  cd $SRC_DIR
+  cd $MYSQL_BUILD_DIR
   apt source mysql-server
+  cd $MYSQL_BUILD_DIR/mysql-8.0-8.0.21
+  wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
+  cmake -DFORCE_INSOURCE_BUILD=1 -DWITH_BOOST=./boost .
   cd $TEST_DIR
   make clean
   make
