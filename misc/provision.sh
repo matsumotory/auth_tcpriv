@@ -14,7 +14,7 @@ THREAD=2
 if [ -d $SRC_DIR ]; then
   rm -rf $SRC_DIR
 fi
-git clone https://github.com/matsumotory/tcp_save_syn_listen.git $SRC_DIR
+git clone https://github.com/matsumotory/auth_remote_client_uid.git $SRC_DIR
 
 # setup build enviroment
 sudo apt-get update
