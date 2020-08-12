@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", :path => "misc/provision.sh", :privileged => false
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = 2048
+    vb.memory = 1024 * 8
     vb.cpus = 4
   end
 
