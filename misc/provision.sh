@@ -50,13 +50,25 @@ if [ $MYHOST = "server" ]; then
   cmake . -DFORCE_INSOURCE_BUILD=1 -DWITH_BOOST=./boost \
         -DCMAKE_INSTALL_PREFIX=/usr/local/mysql_tcpriv \
         -DWITH_DEBUG=OFF \
-        -DCOMPILATION_COMMENT="tcpvir" \
+        -DCOMPILATION_COMMENT="tcpriv" \
         -DMYSQL_SERVER_SUFFIX="-tcpriv" \
         -DMYSQL_UNIX_ADDR="/tmp/mysql_tcpriv.sock" \
         -DMYSQL_TCP_PORT=13306 \
         -DWITH_DEFAULT_FEATURE_SET=xsmall \
         -DWITH_UNIT_TESTS=OFF .
   make
+  make install
+  sudo chown -R vagrant:vagrant /usr/local/mysql_tcpriv
+
+  /usr/local/mysql_tcpriv/bin/mysqld --user=vagrant \
+          --basedir=/usr/local/mysql_tcpriv \
+          --datadir=/usr/local/mysql_tcpriv/data \
+          --log-error-verbosity=3 \
+          --initialize-insecure
+  /usr/local/mysql_tcpriv/bin/mysqld --user=vagrant \
+          --basedir=/usr/local/mysql_tcpriv \
+          --datadir=/usr/local/mysql_tcpriv/data \
+          --log-error-verbosity=3
 
   cd $TEST_DIR
   make clean
