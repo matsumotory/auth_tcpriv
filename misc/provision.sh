@@ -49,28 +49,13 @@ if [ $MYHOST = "server" ]; then
   wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
   cmake . -DFORCE_INSOURCE_BUILD=1 -DWITH_BOOST=./boost \
         -DCMAKE_INSTALL_PREFIX=/usr/local/mysql_tcpriv \
-        -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci \
-        -DWITH_EXTRA_CHARSETS=all \
-        -DWITH_ZLIB=bundled -DWITH_SSL=bundled -DWITH_READLINE=1 \
-        -DWITH_PIC=ON -DWITH_FAST_MUTEXES=ON \
         -DWITH_DEBUG=OFF \
-        -DCOMPILATION_COMMENT="tcpvir" -DMYSQL_SERVER_SUFFIX="-tcpriv" \
-        -DMYSQL_USER=nobody -DMYSQL_UNIX_ADDR="/tmp/mysql_tcpriv.sock" \
+        -DCOMPILATION_COMMENT="tcpvir" \
+        -DMYSQL_SERVER_SUFFIX="-tcpriv" \
+        -DMYSQL_UNIX_ADDR="/tmp/mysql_tcpriv.sock" \
         -DMYSQL_TCP_PORT=13306 \
         -DWITH_DEFAULT_FEATURE_SET=xsmall \
-        -DWITH_PARTITION_STORAGE_ENGINE=1 \
-        -DWITHOUT_DAEMON_EXAMPLE_STORAGE_ENGINE=1 \
-        -DWITHOUT_FTEXAMPLE_STORAGE_ENGINE=1 \
-        -DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
-        -DWITHOUT_ARCHIVE_STORAGE_ENGINE=1 \
-        -DWITHOUT_BLACKHOLE_STORAGE_ENGINE=1 \
-        -DWITHOUT_FEDERATED_STORAGE_ENGINE=1 \
-        -DWITHOUT_INNOBASE_STORAGE_ENGINE=1 \
-        -DWITHOUT_PERFSCHEMA_STORAGE_ENGINE=1 \
-        -DWITHOUT_NDBCLUSTER_STORAGE_ENGINE=1 \
-        -DWITH_INNODB_MEMCACHED=OFF \
-        -DWITH_EMBEDDED_SERVER=OFF \
-        -DWITH_UNIT_TESTS=OFF
+        -DWITH_UNIT_TESTS=OFF .
   make
 
   cd $TEST_DIR
