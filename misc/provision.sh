@@ -68,7 +68,7 @@ if [ $MYHOST = "server" ]; then
   /usr/local/mysql_tcpriv/bin/mysqld --user=vagrant \
           --basedir=/usr/local/mysql_tcpriv \
           --datadir=/usr/local/mysql_tcpriv/data \
-          --log-error-verbosity=3
+          --log-error-verbosity=3 &
 
   cd $TEST_DIR
   make clean
