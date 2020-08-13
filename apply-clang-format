@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for f in `ls src/*.c test/*.c`
+for f in `ls ./*.cc src/*.c test/*.c`
 do
   clang-format -i $f
 done
