@@ -5,6 +5,8 @@ SRC_DIR=~/auth_remote_client_uid
 BUILD_DIR=$SRC_DIR/build
 TEST_DIR=$SRC_DIR/test
 MYSQL_BUILD_DIR=$SRC_DIR/mysql_build
+MYSQL_SRC_DIR=$MYSQL_BUILD_DIR/mysql-8.0-8.0.21
+MYSQL_PLUGIN_DIR=$MYSQL_SRC_DIR/plugin
 REPO=https://github.com/matsumotory/auth_remote_client_uid.git
 
 # use ccache
@@ -45,8 +47,13 @@ if [ $MYHOST = "server" ]; then
   # Build MySQL
   cd $MYSQL_BUILD_DIR
   apt source mysql-server
-  cd $MYSQL_BUILD_DIR/mysql-8.0-8.0.21
-  wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
+
+  # Deploy tcpriv module
+  cd $MYSQL_PLUGIN_DIR
+  git clone $REPO
+
+  # Build mysql
+  cd $MYSQL_SRC_DIR
   cmake . -DFORCE_INSOURCE_BUILD=1 -DWITH_BOOST=./boost \
         -DCMAKE_INSTALL_PREFIX=/usr/local/mysql_tcpriv \
         -DWITH_DEBUG=OFF \
@@ -60,6 +67,7 @@ if [ $MYHOST = "server" ]; then
   make install
   sudo chown -R vagrant:vagrant /usr/local/mysql_tcpriv
 
+  # Start mysqld
   /usr/local/mysql_tcpriv/bin/mysqld --user=vagrant \
           --basedir=/usr/local/mysql_tcpriv \
           --datadir=/usr/local/mysql_tcpriv/data \
