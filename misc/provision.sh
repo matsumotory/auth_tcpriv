@@ -1,13 +1,13 @@
 #/bin/bash
 
 MYHOST=`hostname`
-SRC_DIR=~/auth_remote_client_uid
+SRC_DIR=~/auth_tcpriv
 BUILD_DIR=$SRC_DIR/build
 TEST_DIR=$SRC_DIR/test
 MYSQL_BUILD_DIR=$SRC_DIR/mysql_build
 MYSQL_SRC_DIR=$MYSQL_BUILD_DIR/mysql-8.0-8.0.21
 MYSQL_PLUGIN_DIR=$MYSQL_SRC_DIR/plugin
-REPO=https://github.com/matsumotory/auth_remote_client_uid.git
+REPO=https://github.com/matsumotory/auth_tcpriv.git
 
 # use ccache
 HOSTCXX=g++
