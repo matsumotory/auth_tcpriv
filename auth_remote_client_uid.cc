@@ -96,7 +96,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
 
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
-  if (tinfo.uid != (int)info->user_name)
+  if (tinfo.uid != (unsigned int)info->user_name)
     return CR_ERROR;
 
   return CR_OK;
