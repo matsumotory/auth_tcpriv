@@ -65,11 +65,8 @@ static int get_tcpriv_info(tcpriv_info *tinfo, unsigned char *syn)
 
 static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
 {
-  unsigned char *pkt;
   MYSQL_PLUGIN_VIO_INFO vio_info;
-  socklen_t cred_len = sizeof(cred);
-  struct passwd pwd_buf, *pwd;
-  char buf[1024];
+  unsigned char *pkt;
   unsigned char syn[500];
   socklen_t syn_len = sizeof(syn);
   tcpriv_info tinfo;
