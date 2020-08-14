@@ -134,7 +134,7 @@ mysql_declare_plugin(tcpriv_auth){
     &tcpriv_auth_handler,
     "auth_tcpriv",
     PLUGIN_AUTHOR_ORACLE,
-    "Unix Socket based authentication",
+    "Remote client's uid  based authentication",
     PLUGIN_LICENSE_GPL,
     nullptr, /* Init */
     nullptr, /* Check uninstall */
