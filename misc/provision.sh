@@ -64,7 +64,7 @@ if [ $MYHOST = "server" ]; then
         -DWITH_DEFAULT_FEATURE_SET=xsmall \
         -DWITH_UNIT_TESTS=OFF .
   make
-  make install
+  sudo make install
   sudo chown -R vagrant:vagrant /usr/local/mysql_tcpriv
 
   # Start mysqld
