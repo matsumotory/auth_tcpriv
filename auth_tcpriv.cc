@@ -42,9 +42,8 @@ typedef struct tcpriv_info_s {
   unsigned char len;
 } tcpriv_info;
 
-static int get_tcpriv_info(tcpriv_info *tinfo, unsigned char *syn)
+static int get_tcpriv_info(tcpriv_info *tinfo, unsigned char *syn, socklen_t syn_len)
 {
-  int syn_len = sizeof(syn);
   int status = CR_ERROR;
 
   for (int i = 0; i < syn_len; i++) {
@@ -108,7 +107,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   fprintf(stderr, "tcpriv debugging 4\n");
 
   // get remote client uid
-  if (get_tcpriv_info(&tinfo, syn))
+  if (get_tcpriv_info(&tinfo, syn, syn_len) == CR_ERROR)
     return CR_ERROR;
 
   fprintf(stderr, "tcpriv debugging 5\n");
