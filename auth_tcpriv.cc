@@ -69,9 +69,9 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   MYSQL_PLUGIN_VIO_INFO vio_info;
   unsigned char *pkt;
   unsigned char syn[500];
-  uint64_t cli_uid;
+  unsigned int cli_uid;
   socklen_t syn_len = sizeof(syn);
-  tcpriv_info tinfo;
+  tcpriv_info tinfo = {0};
 
   fprintf(stderr, "tcpriv debugging 0\n");
 
@@ -84,7 +84,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
 
   info->password_used = PASSWORD_USED_NO_MENTION;
   
-  cli_uid = (uint64_t)info->user_name;
+  cli_uid = atoi(info->user_name);
 
   fprintf(stderr, "auth_tcpriv error: cli_uid=%d\n", cli_uid);
 
@@ -117,7 +117,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
   if (tinfo.uid != cli_uid) {
-    fprintf(stderr, "auth_tcpriv error: tinfo.uid=%d cli_uid=%d", tinfo.uid, cli_uid);
+    fprintf(stderr, "auth_tcpriv error: tinfo.uid=%d cli_uid=%d user_name=%s\n", tinfo.uid, cli_uid, info->user_name);
     return CR_ERROR;
   }
 
