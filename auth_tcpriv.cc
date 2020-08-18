@@ -44,7 +44,7 @@ typedef struct tcpriv_info_s {
 
 static int get_tcpriv_info(tcpriv_info *tinfo, unsigned char *syn)
 {
-  socklen_t syn_len = sizeof(syn);
+  int syn_len = sizeof(syn);
   int status = CR_ERROR;
 
   for (int i = 0; i < syn_len; i++) {
@@ -52,7 +52,7 @@ static int get_tcpriv_info(tcpriv_info *tinfo, unsigned char *syn)
         ntohl(*(unsigned int *)&syn[i + 1 + 1]) == TCPOPT_TCPRIV_MAGIC) {
       /* tcpriv options field structure
         kind[1] + length[1] + magic[4] + content[4] */
-      tifno->kind = syn[i];
+      tinfo->kind = syn[i];
       tinfo->len = syn[i + 1];
       tinfo->magic = ntohl(*(unsigned int *)&syn[i + 1 + 1]);
       tinfo->uid = ntohl(*(unsigned int *)&syn[i + 1 + 4 + 1]);
@@ -79,7 +79,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   }
 
   //info->password_used = PASSWORD_USED_NO_MENTION;
-  cli_uid = (unsigned int *)info->user_name;
+  cli_uid = (unsigned int)info->user_name;
 
   vio->info(vio, &vio_info);
   if (vio_info.protocol != MYSQL_PLUGIN_VIO_INFO::MYSQL_VIO_SOCKET)
@@ -99,7 +99,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
 
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
-  if (tinfo.uid != clid_uid)
+  if (tinfo.uid != cli_uid)
     return CR_ERROR;
 
   return CR_OK;
