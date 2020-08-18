@@ -72,54 +72,42 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   socklen_t syn_len = sizeof(syn);
   tcpriv_info tinfo = {0};
 
-  fprintf(stderr, "tcpriv debugging 0\n");
-
   if (info->user_name == nullptr) {
     if (vio->read_packet(vio, &pkt) < 0)
       return CR_ERROR;
   }
 
-  fprintf(stderr, "tcpriv debugging 1\n");
-
   info->password_used = PASSWORD_USED_NO_MENTION;
   
   cli_uid = atoi(info->user_name);
 
-  fprintf(stderr, "auth_tcpriv error: cli_uid=%d\n", cli_uid);
-
   vio->info(vio, &vio_info);
   if (vio_info.protocol != MYSQL_PLUGIN_VIO_INFO::MYSQL_VIO_TCP)
     return CR_ERROR;
-
-  fprintf(stderr, "tcpriv debugging 2\n");
 
   // get passive syn headers
   memset(syn, 0, sizeof(syn));
   if (getsockopt(vio_info.socket, IPPROTO_TCP, TCP_SAVED_SYN, syn, &syn_len) != 0)
     return CR_ERROR;
 
-  fprintf(stderr, "tcpriv debugging 3\n");
-
   /// tcpriv supports IPv4 only
   if (syn_len != 60 || syn[0] >> 4 != 0x4)
     return CR_ERROR;
-
-  fprintf(stderr, "tcpriv debugging 4\n");
 
   // get remote client uid
   if (get_tcpriv_info(&tinfo, syn, syn_len) == CR_ERROR)
     return CR_ERROR;
 
-  fprintf(stderr, "tcpriv debugging 5\n");
-
 
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
+  fprintf(stderr, "auth_tcpriv debug: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
   if (tinfo.uid != cli_uid) {
-    fprintf(stderr, "auth_tcpriv error: tinfo.uid=%d cli_uid=%d user_name=%s\n", tinfo.uid, cli_uid, info->user_name);
+    fprintf(stderr, "auth_tcpriv debug: don't match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
     return CR_ERROR;
   }
 
+  fprintf(stderr, "auth_tcpriv debug: match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
   return CR_OK;
 }
 
