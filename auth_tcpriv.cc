@@ -6,6 +6,7 @@
 #include <pwd.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 #include "my_compiler.h"
 
@@ -68,6 +69,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   MYSQL_PLUGIN_VIO_INFO vio_info;
   unsigned char *pkt;
   unsigned char syn[500];
+  unsigned int cli_uid;
   socklen_t syn_len = sizeof(syn);
   tcpriv_info tinfo;
 
@@ -76,7 +78,8 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
       return CR_ERROR;
   }
 
-  info->password_used = PASSWORD_USED_NO_MENTION;
+  //info->password_used = PASSWORD_USED_NO_MENTION;
+  cli_uid = (unsigned int *)info->user_name;
 
   vio->info(vio, &vio_info);
   if (vio_info.protocol != MYSQL_PLUGIN_VIO_INFO::MYSQL_VIO_SOCKET)
@@ -96,7 +99,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
 
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
-  if (tinfo.uid != (unsigned int)info->user_name)
+  if (tinfo.uid != clid_uid)
     return CR_ERROR;
 
   return CR_OK;
