@@ -78,7 +78,7 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   }
 
   info->password_used = PASSWORD_USED_NO_MENTION;
-  
+
   cli_uid = atoi(info->user_name);
 
   vio->info(vio, &vio_info);
@@ -98,16 +98,17 @@ static int tcpriv_auth(MYSQL_PLUGIN_VIO *vio, MYSQL_SERVER_AUTH_INFO *info)
   if (get_tcpriv_info(&tinfo, syn, syn_len) == CR_ERROR)
     return CR_ERROR;
 
-
   // parse uid from database name and compare tinfo.uid with the uid
   // info->user_name should be remote uid in this plugin
   fprintf(stderr, "auth_tcpriv debug: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
   if (tinfo.uid != cli_uid) {
-    fprintf(stderr, "auth_tcpriv debug: don't match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
+    fprintf(stderr, "auth_tcpriv debug: don't match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid,
+            cli_uid);
     return CR_ERROR;
   }
 
-  fprintf(stderr, "auth_tcpriv debug: match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid, cli_uid);
+  fprintf(stderr, "auth_tcpriv debug: match remote uid with auth uid: remote_uid=%d auth_uid=%d \n", tinfo.uid,
+          cli_uid);
   return CR_OK;
 }
 
